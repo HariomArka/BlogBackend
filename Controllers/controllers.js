@@ -66,31 +66,6 @@ const deleteBlog = async(req,res) => {
 }
 
 //update blog
-
-// const updateBlog = async(req,res) => {
-//     const { id } = req.params
-
-//     if(!mongoose.Types.ObjectId.isValid(id)){
-//         return res.status(404).json({error:'No such blog. Id is not valid'})
-//     }
-
-//     try {
-//         const updatedBlog = await blog.findOneAndUpdate(
-//             {_id: id},
-//             {...req.body},
-//             {new: true, runValidators: true}
-//         )
-
-//         if(!updatedBlog){
-//             return res.status(404).json({error:'No such blog'})
-//         }
-
-//         res.status(200).json(updatedBlog)
-//     } catch (error) {
-//         res.status(500).json({error: error.message})
-//     }
-// }
-
 const updateBlog = async (req, res) => {
   const { id } = req.params;
 
@@ -117,22 +92,57 @@ const updateBlog = async (req, res) => {
 
 
 //add comment 
+// const addBlogComment = async (req, res) => {
+//   const { id } = req.params;
+//   const { newComment } = req.body;
+
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(404).json({ error: 'No such blog. Id is not valid' });
+//   }
+
+//   if (!newComment || typeof newComment !== 'string') {
+//     return res.status(400).json({ error: 'Invalid comment provided' });
+//   }
+
+//   try {
+//     const updatedBlog = await blog.findOneAndUpdate(
+//       { _id: id },
+//       { $push: { comments: newComment } },
+//       { new: true, runValidators: true }
+//     );
+
+//     if (!updatedBlog) {
+//       return res.status(404).json({ error: 'No such blog' });
+//     }
+
+//     res.status(200).json(updatedBlog);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 const addBlogComment = async (req, res) => {
   const { id } = req.params;
   const { newComment } = req.body;
+
+  // Add debugging
+  console.log('Blog ID:', id);
+  console.log('Request body:', req.body);
+  console.log('New comment:', newComment);
+  console.log('Comment type:', typeof newComment);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such blog. Id is not valid' });
   }
 
-  if (!newComment || typeof newComment !== 'string') {
+  if (!newComment || typeof newComment !== 'string' || newComment.trim() === '') {
     return res.status(400).json({ error: 'Invalid comment provided' });
   }
 
   try {
     const updatedBlog = await blog.findOneAndUpdate(
       { _id: id },
-      { $push: { comments: newComment } },
+      { $push: { comments: newComment.trim() } }, // Trim the comment before saving
       { new: true, runValidators: true }
     );
 
@@ -140,8 +150,10 @@ const addBlogComment = async (req, res) => {
       return res.status(404).json({ error: 'No such blog' });
     }
 
+    console.log('Updated blog:', updatedBlog);
     res.status(200).json(updatedBlog);
   } catch (error) {
+    console.error('Error adding comment:', error);
     res.status(500).json({ error: error.message });
   }
 };

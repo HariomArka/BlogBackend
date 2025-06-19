@@ -19,5 +19,8 @@
     "lucide-react": "^0.517.0",
     "mongoose": "^8.15.2",
     "nodemailer": "^7.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

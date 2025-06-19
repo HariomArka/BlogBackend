@@ -4,19 +4,33 @@ const bcrypt = require('bcrypt');
 
 const createToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '3d' });
 
+
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, email, password } = req.body;
+
   try {
+    // Check if user already exists by email
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ error: 'Email already registered' });
 
-    const user = await User.create({ email, password });
+    // Create the new user with username
+    const user = await User.create({ username, email, password });
+
+    // Generate JWT token
     const token = createToken(user._id);
-    res.status(201).json({ email: user.email, token });
+
+    // Send response
+    res.status(201).json({
+      username: user.username,
+      email: user.email,
+      token
+    });
   } catch (err) {
+    console.error('Registration error:', err); 
     res.status(500).json({ error: err.message });
   }
 };
+
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
