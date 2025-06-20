@@ -4,7 +4,8 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 const blogroute = require('./routes/Blogs');
-const authroute = require('./routes/auth'); // 
+const authroute = require('./routes/auth'); 
+const mailRoutes = require('./routes/mail'); 
 
 // express app
 const app = express();
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
 // routes
 app.use('/api/blogs', blogroute);
 app.use('/api/auth', authroute);
+app.use('/api', mailRoutes);
+
 
 // connect to db
 mongoose.connect(process.env.MONG_URI)
