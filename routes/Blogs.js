@@ -7,7 +7,8 @@ const {
     deleteBlog,
     updateBlog,
     updateBlogLikes,
-    addBlogComment
+    addBlogComment,
+    getmyBlogs
 } = require('../Controllers/controllers') // Make sure this path is correct
 
 const router = express.Router()
@@ -17,6 +18,9 @@ router.get('/', getBlogs)
 
 // GET single blog
 router.get('/:id', getoneBlog)
+
+// GET blogs by username
+router.get('/username/:username', getmyBlogs)
 
 // POST new blog
 router.post('/', createBlog)

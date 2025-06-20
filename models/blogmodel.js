@@ -28,6 +28,10 @@ const blogSchema = new schema({
         type: String,
         required: false
     },
+    username:{
+        type: String,
+        required: true
+    },
     comments:{
         type: [String], // Array of comment strings
         default: []     // Initialize as empty array
