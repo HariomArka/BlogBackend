@@ -5,18 +5,24 @@ exports.sendMail = async (req, res) => {
 
   // Configure transporter
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: process.env.EMAIL_FROM,
-      pass: process.env.EMAIL_PASS
+      user: process.env.EMAIL_FROM, // full Gmail address
+      pass: process.env.EMAIL_PASS  // app password
+    },
+    tls: {
+      rejectUnauthorized: false // only for development
     }
   });
 
+
   const mailOptions = {
-  from: email,
-  to: 'blogspherehelpdesk@gmail.com',
-  subject: `New message from ${name}`,
-  html: `
+    from: email,
+    to: 'blogspherehelpdesk@gmail.com',
+    subject: `New message from ${name}`,
+    html: `
     <style>
       @keyframes fadeInUp {
         from {
@@ -92,8 +98,8 @@ exports.sendMail = async (req, res) => {
       
     </div>
   `,
-  text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}` // fallback for clients that don't support HTML
-};
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}` // fallback for clients that don't support HTML
+  };
   try {
     await transporter.sendMail(mailOptions);
     res.status(200).json({ success: true, message: 'Email sent successfully!' });
