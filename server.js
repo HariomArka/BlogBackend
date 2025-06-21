@@ -17,7 +17,7 @@ app.use(express.json());
 
 // CORS config for deployment (update origin)
 app.use(cors({
-  origin: "https://your-frontend.vercel.app", // Replace with your frontend domain
+  origin: "*", // Replace with your frontend domain
   credentials: true
 }));
 
